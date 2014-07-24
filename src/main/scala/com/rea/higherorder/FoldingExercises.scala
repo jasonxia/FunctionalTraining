@@ -33,9 +33,9 @@ object FoldingExercises {
   /**
    * foldRight is the same as foldLeft, except it processes the list from right to left.
    */
-  def foldRight[A,B](initialValue:B, list: List[A])(f: (A,B) => B):B = list.reverse match {
+  def foldRight[A,B](initialValue:B, list: List[A])(f: (A,B) => B):B = list match {
     case Nil => initialValue
-    case h :: t => foldRight(f(h, initialValue), t.reverse)(f)
+    case h :: t => f(h, foldRight(initialValue, t)(f))
   }
 
   /**
@@ -53,7 +53,7 @@ object FoldingExercises {
 
   def append[A](x: List[A], y: List[A]): List[A] = foldRight(y, x)(_ :: _)
 
-  def flatten[A](x: List[List[A]]): List[A] = foldLeft(List[A](), x)((acc, l) => acc ::: l)
+  def flatten[A](x: List[List[A]]): List[A] = foldRight(List[A](), x)(append)
 
   def flatMap[A, B](x: List[A], f: A => List[B]): List[B] = flatten(map(x)(f))
 
