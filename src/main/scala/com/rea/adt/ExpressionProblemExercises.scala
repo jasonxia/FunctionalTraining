@@ -15,7 +15,12 @@ object Expr {
   /**
    * Evaluate the expression.
    */
-  def eval(expr: Expr): Boolean = ???
+  def eval(expr: Expr): Boolean = expr match {
+    case Const(a)  => a
+    case And(a, b) => eval(a) && eval(b)
+    case Or(a, b)  => eval(a) || eval(b)
+    case Not(a)    => !eval(a)
+  }
   
   /**
    * Normalise the expression, such that: 
@@ -28,6 +33,11 @@ object Expr {
   /**
    * Show, using English lower-case words "and", "or", "not", "true", "false"
    */
-  def show(expr: Expr): String = ???
+  def show(expr: Expr): String = expr match {
+    case Const(a)  => a.toString
+    case And(a, b) => eval(a) + " and " + eval(b)
+    case Or(a, b)  => eval(a) + " or " + eval(b)
+    case Not(a)    => " not " + eval(a)
+  }
   
 }

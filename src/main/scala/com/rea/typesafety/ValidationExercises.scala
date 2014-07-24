@@ -4,13 +4,13 @@ import scalaz._, Scalaz._
 
 object ValidationExercises {
 
-  def validateKey(key: String, input: Map[String, String]): ValidationNel[ErrorCode, String] = ???
+  def validateKey(key: String, input: Map[String, String]): ValidationNel[ErrorCode, String] = input.get(key).toSuccess(keyNotFound(key)).toValidationNel
 
-  def nameValidation(name: String, label: String): ValidationNel[ErrorCode, String] = ???
+  def nameValidation(name: String, label: String): ValidationNel[ErrorCode, String] = if (name.isEmpty) nameIsEmpty(label).failNel else name.successNel
 
-  def passwordStrengthValidation(password: String): ValidationNel[ErrorCode, String] = ???
+  def passwordStrengthValidation(password: String): ValidationNel[ErrorCode, String] = if (password.isEmpty) passwordTooWeak.failNel else password.successNel
 
-  def passwordLengthValidation(password: String): ValidationNel[ErrorCode, String] = ???
+  def passwordLengthValidation(password: String): ValidationNel[ErrorCode, String] = if (password.isEmpty) passwordTooShort.failNel else password.successNel
 
   def validateInput(input: Map[String, String]): ValidationNel[ErrorCode, Person] = ???
 
