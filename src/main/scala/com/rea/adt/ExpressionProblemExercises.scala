@@ -28,16 +28,25 @@ object Expr {
    * !a & !b ==> !(a | b)
    * !a | !b ==> !(a & b)
    */
-  def normalise(expr: Expr): Expr = ???
-  
+  def normalise(expr: Expr): Expr = expr match {
+    case Const(_) => expr
+    case Not(Const(_)) => expr
+    case Not(Not(a)) => normalise(a)
+    case Not(a) => normalise(Not(normalise(a)))
+    case And(Not(a), Not(b)) => Not(Or(normalise(a), normalise(b)))
+    case And(a, b) => And(normalise(a), normalise(b))
+    case Or(Not(a), Not(b)) => Not(And(normalise(a), normalise(b)))
+    case Or(a, b) => Or(normalise(a), normalise(b))
+  }
+
   /**
    * Show, using English lower-case words "and", "or", "not", "true", "false"
    */
   def show(expr: Expr): String = expr match {
     case Const(a)  => a.toString
-    case And(a, b) => eval(a) + " and " + eval(b)
-    case Or(a, b)  => eval(a) + " or " + eval(b)
-    case Not(a)    => " not " + eval(a)
+    case And(a, b) => show(a) + " and " + show(b)
+    case Or(a, b)  => show(a) + " or " + show(b)
+    case Not(a)    => "not " + show(a)
   }
   
 }

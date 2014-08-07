@@ -6,9 +6,9 @@ object OptionalExercises1 {
 
   def getFromConfig(key: String): Option[String] = config.get(key)
 
-  def lengthOfHost(): Option[Int] = getFromConfig("host") map(_.length)
+  def lengthOfHost(): Option[Int] = getFromConfig("host") map (_.length)
 
-  def portPlus1000(): Option[Int] = getFromConfig("port") map(_.toInt + 1000)
+  def portPlus1000(): Option[Int] = getFromConfig("port") map (_.toInt + 1000)
 }
 
 object OptionalExercises2 {
@@ -70,12 +70,15 @@ object OptionalExercises3 {
     case _ => Nothing
   }
 
-  def sequence[A](l: List[Maybe[A]]): Maybe[List[A]] =
-    l.foldLeft[Maybe[List[A]]](Just(Nil)) {
+  def sequence[A](list: List[Maybe[A]]): Maybe[List[A]] =
+    list.foldLeft[Maybe[List[A]]](Just(Nil)) {
       (acc: Maybe[List[A]], a: Maybe[A]) => (acc, a) match {
         case (Just(l), Just(v)) => Just(l ++ List(v))
         case _ => Nothing
       }
     }
+
+  def collect[A](list: List[Maybe[A]]): Maybe[List[A]] =
+    sequence(list.filter(_ != Nothing))
 }
 

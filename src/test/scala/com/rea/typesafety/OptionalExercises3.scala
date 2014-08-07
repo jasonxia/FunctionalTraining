@@ -81,4 +81,18 @@ class OptionalExercises3Spec extends Specification {
     }
   }
 
+  "collect" should {
+    "operate on a empty list" in {
+      collect(Nil) should be equalTo Just(Nil)
+    }
+
+    "operate on a list Nothing" in {
+      collect(List(Nothing, Nothing, Nothing)) should be equalTo Just(Nil)
+    }
+
+    "operate on a list with a Nothing" in {
+      collect(List(Just(1), Nothing, Just(2))) should be equalTo Just(List(1, 2))
+    }
+  }
+
 }
